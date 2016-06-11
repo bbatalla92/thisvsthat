@@ -1,0 +1,167 @@
+
+<md-content>
+
+  <div layout="row" style=" margin: auto; text-align: center; overflow: visible; display: block " flex="90" flex-sm="100" flex-xs="100" >
+
+    <h1 class="headerText">This is exactly where a question, or short description would go! and with better font</h1>
+
+    <!--width >= 1280px-->
+    <div hide show-gt-md flex="100"  class="md-padding" layout="row" layout-align="space-between">
+
+      <div flex="33">
+        <md-button flex style="height: 400px; width: 400px; background-color: #0b97c4; " class="answerButtons md-fab" aria-label="Eat cake"><h1 class="headerText">Pepsi</h1></md-button>
+      </div>
+
+      <div flex="33" style="margin: auto">
+        <div style=" height: 250px; width: 250px;  border-radius: 150px; margin: auto; text-align: center" md-whiteframe="3">
+          <h1 class="headerText" style="margin: auto; vertical-align: middle; line-height: 250px">VS.</h1>
+        </div>
+      </div>
+      <div flex="33">
+        <div>
+          <md-button style="height: 400px; width: 400px;" class="md-fab" aria-label="Eat cake"><h1 class="headerText">Coke</h1></md-button>
+        </div>
+      </div>
+
+    </div>
+
+    <!--960px <= width < 1280px-->
+    <div hide show-md flex="100"  class="md-padding" layout="row" layout-align="space-between">
+
+      <div flex="33">
+        <md-button flex style="height: 300px; width: 300px; background-color: #0b97c4; " class="answerButtons md-fab" aria-label="Eat cake"><h1>Pepsi</h1></md-button>
+      </div>
+
+      <div flex="33" style="margin: auto">
+        <div style=" height: 200px; width: 200px;  border-radius: 150px; margin: auto; text-align: center" md-whiteframe="3">
+          <h1 style="margin: auto; vertical-align: middle; line-height: 150px">VS.</h1>
+        </div>
+      </div>
+      <div flex="33">
+        <div>
+          <md-button style="height: 300px; width: 300px;" class="md-fab" aria-label="Eat cake"><h1>Coke</h1></md-button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!--600px <= width < 960px-->
+    <div hide show-sm flex="100"  class="md-padding" layout="row" style="overflow: visible;">
+
+      <div flex="40">
+        <md-button flex style="height: 215px; width: 215px; background-color: #0b97c4; " class="answerButtons md-fab" aria-label="Eat cake"><h1>Pepsi</h1></md-button>
+      </div>
+
+      <div flex="20" style="margin: auto">
+        <div style=" height: 115px; width: 115px;  border-radius: 150px;  bottom: 0; margin:auto; text-align: center" md-whiteframe="3">
+          <h1 style="margin: auto; vertical-align: baseline; line-height: 125px">VS.</h1>
+        </div>
+      </div>
+      <div flex="40">
+        <div>
+          <md-button style="height: 215px; width: 215px;" class="md-fab" aria-label="Eat cake"><h1>Coke</h1></md-button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!--width <= 600px-->
+    <div hide-gt-xs flex="100" layout="row" style="overflow: visible;">
+
+      <div flex="40">
+        <md-button flex style="height: 115px; width: 115px; background-color: #0b97c4; " class="answerButtons md-fab" aria-label="Eat cake"><h1>Pepsi</h1></md-button>
+      </div>
+
+      <div flex="20" style="margin: auto">
+        <div style=" height: 65px; width: 65px;  border-radius: 150px;  bottom: 0; margin:auto; text-align: center" md-whiteframe="3">
+          <h1 style="margin: auto; vertical-align: baseline; line-height: 65px">VS.</h1>
+        </div>
+      </div>
+      <div flex="40">
+        <div>
+          <md-button style="height: 115px; width: 115px;" class="md-fab" aria-label="Eat cake"><h1>Coke</h1></md-button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <md-button style="min-width: 1%; position: fixed; right: 5%;" class="md-raised md-primary" ng-click="quAnswered = !quAnswered">
+      <label hide-xs>Next </label>
+      <label hide show-gt-sm>Question</label>
+      <md-icon style=" height: 24px; width: 24px;" md-svg-src="assets/icons/ic_arrow_forward_white_24px.svg" aria-label="message"></md-icon>
+    </md-button>
+    <br>
+    <br>
+
+  </div>
+  <!-- Charts Section -->
+  <br>
+  <md-divider ng-show="quAnswered"></md-divider>
+  <br>
+  <section ng-show="quAnswered" flex="60" flex-sm="80" flex-xs="100" layout="column" layout-align="center center" style="margin:0 auto; margin-bottom: 20px">
+
+    <div style="width: 90%;">
+      <h3 style="margin: 0; margin-bottom: -10px">Stats:</h3>
+    </div>
+    <br>
+    <div style="width: 60%;" >
+      <!-- Bar Chart -->
+      <canvas style="max-width: 400px; max-height: 200px; margin: 0 auto;"  id="bar" class="chart chart-bar" chart-data="chartData" chart-legend="true" chart-labels="chartLabels" chart-series="series"></canvas>
+      <!-- Pie Chart -->
+      <canvas  style="max-width: 400px; max-height: 200px" id="pie" class="chart chart-pie" chart-data="pieData" chart-labels="chartLabels" chart-legend="true"></canvas>
+
+    </div>
+
+
+  </section>
+
+  <!--Comments section-->
+  <md-divider></md-divider>
+  <br>
+  <section flex="60" flex-sm="80" flex-xs="100" layout="column" layout-align="center center" style="margin:0 auto">
+
+    <div style="width: 90%;">
+      <h3 style="margin: 0; margin-bottom: -10px">Comments:</h3>
+    </div>
+    <!-- Comment Button -->
+    <md-button class="md-icon-button" ng-click="commentDialog($event)" style=" height: 100px; width: 100px;" >
+      <md-icon style=" height: 48px; width: 48px;" md-svg-src="assets/icons/ic_message_black_24px.svg" aria-label="message"></md-icon>
+    </md-button>
+
+    <!-- Comment Card Layout -->
+    <section layout="column" layout-align="start start" style="width: 100%">
+
+      <h4 style="margin:0 auto; " ng-hide="comments.length > 0"> <i>Hey no comments yet, you can be the first one!</i></h4>
+      <md-card ng-show="comments.length > 0" ng-repeat="com in comments" style="width: 60%; margin: 0 auto; margin-bottom: 10px">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{com.nickName}}</span>
+            <span class="md-subhead">{{com.date | date}}</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+          <p> {{com.text}}</p>
+        </md-card-content>
+
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button class="md-icon-button launch" ng-click="flagComment($index)">
+            <md-icon md-svg-src="assets/icons/ic_flag_black_24px.svg" aria-label="message"></md-icon>
+          </md-button>
+          <md-button class="md-icon-button launch" ng-click="likeComment($index)">
+            <md-icon md-svg-src="assets/icons/ic_thumb_up_black_24px.svg" aria-label="message"></md-icon>
+          </md-button>
+        </md-card-actions>
+
+      </md-card>
+
+    </section>
+
+
+
+
+
+  </section>
+</md-content>

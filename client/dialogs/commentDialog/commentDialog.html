@@ -1,0 +1,57 @@
+<md-dialog flex="40">
+  <md-content>
+
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>New Comment</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancelDialog()">
+          <md-icon md-svg-src="assets/icons/ic_close_white_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+
+
+    <ng-form name="commentForm" class="md-padding" layout="column">
+
+      <md-input-container class="md-block"  flex-gt-sm>
+        <label>Text*</label>
+        <md-icon md-svg-src="assets/icons/ic_info_outline_white_24px.svg" aria-label="info"></md-icon>
+        <input md-minlength="5" md-maxlength="120" required type="text" name="comment" ng-model="newComment.text" />
+        <div ng-messages="commentForm.comment.$error">
+          <div ng-message="email">This field must be a valid email address.</div>
+        </div>
+      </md-input-container>
+
+      <!--  nic-name -->
+      <md-input-container class="md-block"  flex-gt-sm>
+        <label>Nickname (Optional)</label>
+        <md-icon md-svg-src="assets/icons/ic_info_outline_white_24px.svg" aria-label="info"></md-icon>
+        <input name="nickName" ng-model="user.nickName" />
+      </md-input-container>
+
+      <!--  Email -->
+      <md-input-container class="md-block"  flex-gt-sm>
+        <label>Email*</label>
+        <md-icon md-svg-src="assets/icons/ic_info_outline_white_24px.svg" aria-label="info"></md-icon>
+        <input required type="email" name="email" ng-model="user.email" />
+        <div ng-messages="commentForm.email.$error">
+          <div ng-message="email">This field must be a valid email address.</div>
+        </div>
+      </md-input-container>
+
+    </ng-form>
+
+
+    <md-dialog-action layout="row" layout-align="end end">
+      <md-button class="md-raised md-warn" ng-click="cancelDialog()">
+        Cancel
+      </md-button>
+      <md-button class="md-raised md-primary" ng-click="commentSubmitted()">
+        Submit!
+      </md-button>
+    </md-dialog-action>
+  </md-content>
+</md-dialog>
