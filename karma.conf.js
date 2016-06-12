@@ -24,6 +24,8 @@ module.exports = function(config) {
       'client/bower_components/angular-material/angular-material.js',
       'client/bower_components/Chart.js/Chart.js',
       'client/bower_components/angular-chart.js/dist/angular-chart.js',
+      'client/bower_components/firebase/firebase.js',
+      'client/bower_components/angularfire/dist/angularfire.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'client/app/app.js',

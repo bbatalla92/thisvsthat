@@ -10,7 +10,8 @@ angular.module('thisvsthatApp', [
   'ui.router',
   'ngAnimate',
   'ngMaterial',
-  'chart.js'
+  'chart.js',
+  'firebase'
 
   ])
   .config(function($urlRouterProvider, $locationProvider, $mdIconProvider) {

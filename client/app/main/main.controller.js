@@ -20,7 +20,7 @@
         chartLegend: true
       });
     }])
-    .controller('mainCtrl', function($scope, $mdDialog, $cookies){
+    .controller('mainCtrl', function($scope, $mdDialog, $cookies, $firebaseObject, dbConfig){
 
       // function expressions
       $scope.answered = answeredQuestion;
@@ -41,20 +41,29 @@
 
 
 
-      // Data Variables
-      //$scope.Questions = ;    @TODO
-      //$scope.comments = ;    @TODO
-      var questions = [{question: "Which do you like better?", optionA:"Pepsi", optionB:"Coke",category:'Food & Drink'}
-      ,{question: "Who is gonna be the next president?", optionA:"Hillary", optionB:"Trump",category:'Politics'},
-        {question: "Are you more...?", optionA:"Indoor", optionB:"Outdoor",category:'Personal'}];
-      $scope.comments = [{text: "Pepsi si soooo gooood!!!", date:new Date(), likes: 0, flags: 0, email:"", nickName:"Anonymous", qID:''}];
-      $scope.user = {email:"", isE: false, isMale: true, nickName:""};
-      $scope.newQ = {question: "", optionA:"", optionB:"",category:''};
+      $scope.curQuestion;
+      // Data Variables ======================================
+      var questions = [];
+      $scope.comments = [] //=[{text: "Pepsi is soooo gooood!!!", date:new Date(), likes: 0, flags: 0, email:"", nickName:"Anonymous", qID:''}];
+      dbConfig.getQuestions().then(function (data) {
+        var count = 0;
+        var keys = Object.keys(data);
+        for(var i in data){
+          questions.push(data[i]);
+          questions[count].qID = keys[count];
+          count++;
+        }
+
+        $scope.curQuestion = questions[0];
+
+        $scope.comments = getComments(questions[0].qID);
+      });
+      $scope.user = {email:"", isE: false, isMale: true, nickName:"",questions:[], lastLogin:new Date()};
+      $scope.newQ = {question: "", optionA:"", optionB:"",category:'', optionANum:0,optionBNum:0,flags:0,likes:0, whoAnswered:[], ownerEmail:'', created: new Date()};
       $scope.quAnswered = false;
       $scope.newComment = {text: "", date:new Date(), likes: 0, flags: 0, email:"", nickName:"", qID:''};
       $scope.quAnswered = -1;
       var questIndex = 0;
-      $scope.curQuestion = questions[questIndex];
 
 
 
@@ -63,8 +72,8 @@
       // Chart Variables
       $scope.pieData = [30,50];
       $scope.chartData = [[30,60],[50,20]];
-      $scope.chartLabels = [ 'Female', 'Male'];
-      $scope.series = ['Pepsi', 'Coca-Cola'];
+      $scope.series = [ 'Female', 'Male'];
+      $scope.chartLabels = ['Pepsi', 'Coca-Cola'];
       Chart.defaults.global.responsive = true;
 
 
@@ -72,24 +81,24 @@
       // ============================== Functions -------------------------------------------------
       function answeredQuestion(ans){
         $scope.quAnswered = ans;
-        console.log("answered question ans: " + $scope.quAnswered);
+        //console.log("answered question ans: " + $scope.quAnswered);
         //option A is picked
         if(ans == 0){
 
         }else{
-              //option B is picked
+          //option B is picked
 
         }
       }
 
       function askQuestionDialog(ev){
-        console.log('ask');
+        //console.log('ask');
         if($cookies.get('email') != null)
           $scope.user.email = $cookies.get('email');
         else
-          console.log('no email');
+          //console.log('no email');
 
-        console.log('email', $scope.user);
+        //console.log('email', $scope.user);
 
         $mdDialog.show({
           controller: "mainCtrl",
@@ -102,11 +111,10 @@
 
 
       function commentDialog(ev){
-        console.log('comment');
+       console.log('comment');
         if($cookies.get('email') != null)
           $scope.user.email = $cookies.get('email');
-        else
-          console.log('no email');
+
 
         $mdDialog.show({
           controller: "mainCtrl",
@@ -124,11 +132,12 @@
       function qAsked(){
         if($cookies.get('email') == null || $cookies.get('email') != $scope.user.email) {
           $cookies.put('email', $scope.user.email);
-          console.log("email saved");
         }
-
-        console.log("User",$scope.user);
-        console.log("Question",$scope.newQ);
+        $scope.newQ.ownerEmail = $scope.user.email;
+        questions.push($scope.newQ);
+        var qID = dbConfig.saveQuestion($scope.newQ);
+        $scope.user.questions.push(qID);
+        dbConfig.setUser($scope.user);
         $mdDialog.hide();
       }
 
@@ -136,28 +145,35 @@
         // cacheing email
         if($cookies.get('email') == null || $cookies.get('email') != $scope.user.email) {
           $cookies.put('email', $scope.user.email);
-          console.log("email saved");
+          //console.log("email saved");
         }
         // Cacheing nick name
         if($cookies.get('nickName') == null || $cookies.get('nicName') != $scope.user.nickName) {
-          $cookies.put('email', $scope.user.email);
-          console.log("email saved");
+          $cookies.put('nickName', $scope.user.nickName);
+
         }
+
+
         if($scope.user.nickName != "")
           $scope.newComment.nickName = $scope.user.nickName;
-        else
-          $scope.newComment.nickName = 'Anonymous';
 
-
-
+        $scope.newComment.qID = $scope.curQuestion.qID;
         $scope.newComment.email = $scope.user.email;
-        $scope.comments.push($scope.newComment);
-        //console.log("comments arr", $scope.comments);
+       // $scope.comments.push($scope.newComment);
 
-        //@TODO Add new comment to DB
-        // service.addToDB();
+        dbConfig.saveComment($scope.newComment);
 
         $mdDialog.hide();
+      }
+
+      function getComments(id){
+        var comments = [];
+        dbConfig.getComments(id).then(function(data){
+          for(var i in data){
+            comments.push(data[i]);
+          }
+          return comments;
+        })
       }
 
       function flagComment(index){
@@ -173,6 +189,10 @@
       }
 
       function nextQuestion(){
+        console.log("current question:", $scope.curQuestion);
+        console.log("current index:", questIndex);
+        console.log("questions:", questions);
+
         $scope.quAnswered = -1;
 
 
