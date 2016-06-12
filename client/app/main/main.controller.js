@@ -24,10 +24,12 @@
 
       // function expressions
       $scope.answered = answeredQuestion;
+      $scope.questAnswered = answeredQuestion;
       $scope.test = test;
       $scope.flagComment = flagComment;
       $scope.flagQuestion = flagQuestion;
       $scope.likeComment = likeComment;
+      $scope.nextQuestion = nextQuestion;
 
       // Dialog functions
       $scope.askQuestion = askQuestionDialog;
@@ -42,12 +44,17 @@
       // Data Variables
       //$scope.Questions = ;    @TODO
       //$scope.comments = ;    @TODO
-
+      var questions = [{question: "Which do you like better?", optionA:"Pepsi", optionB:"Coke",category:'Food & Drink'}
+      ,{question: "Who is gonna be the next president?", optionA:"Hillary", optionB:"Trump",category:'Politics'},
+        {question: "Are you more...?", optionA:"Indoor", optionB:"Outdoor",category:'Personal'}];
       $scope.comments = [{text: "Pepsi si soooo gooood!!!", date:new Date(), likes: 0, flags: 0, email:"", nickName:"Anonymous", qID:''}];
       $scope.user = {email:"", isE: false, isMale: true, nickName:""};
       $scope.newQ = {question: "", optionA:"", optionB:"",category:''};
       $scope.quAnswered = false;
       $scope.newComment = {text: "", date:new Date(), likes: 0, flags: 0, email:"", nickName:"", qID:''};
+      $scope.quAnswered = -1;
+      var questIndex = 0;
+      $scope.curQuestion = questions[questIndex];
 
 
 
@@ -64,10 +71,16 @@
 
       // ============================== Functions -------------------------------------------------
       function answeredQuestion(ans){
+        $scope.quAnswered = ans;
+        console.log("answered question ans: " + $scope.quAnswered);
+        //option A is picked
+        if(ans == 0){
 
+        }else{
+              //option B is picked
+
+        }
       }
-
-      $scope.hi = 'hi';
 
       function askQuestionDialog(ev){
         console.log('ask');
@@ -124,7 +137,6 @@
         if($cookies.get('email') == null || $cookies.get('email') != $scope.user.email) {
           $cookies.put('email', $scope.user.email);
           console.log("email saved");
-
         }
         // Cacheing nick name
         if($cookies.get('nickName') == null || $cookies.get('nicName') != $scope.user.nickName) {
@@ -139,10 +151,8 @@
 
 
         $scope.newComment.email = $scope.user.email;
-
-        console.log("comment", $scope.newComment);
         $scope.comments.push($scope.newComment);
-        console.log("comments arr", $scope.comments);
+        //console.log("comments arr", $scope.comments);
 
         //@TODO Add new comment to DB
         // service.addToDB();
@@ -159,6 +169,14 @@
       }
 
       function flagQuestion(){
+
+      }
+
+      function nextQuestion(){
+        $scope.quAnswered = -1;
+
+
+        $scope.curQuestion = questions[questIndex++ % questions.length];
 
       }
 
